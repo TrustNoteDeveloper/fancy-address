@@ -1,40 +1,6 @@
-<!DOCTYPE html>
-<html>
-<script src="core.js">
-
-</script>
-<head>
-    <meta charset="UTF-8">
-    <style type="text/css">
-
-    body {
-        padding: 16px;
-    }
-
-    input {
-        font-size: 22px;
-        color: #E05B41;
-        letter-spacing: 0;
-        text-align: left;
-        line-height: 22px;
-    }
-
-    button {
-        font-size: 22px;
-    }
-
-    </style>
-    </style>
-</head>
-<body>
-
-<h2>TTT地址生成工具</h2>
-
-<script>
-
-    var WALLET_INDEX_DEPTHS = 3
-    var WALLET_ADDRESS_DEPTHS = 30
-    var matchCnt = 0
+WALLET_INDEX_DEPTHS = 3
+WALLET_ADDRESS_DEPTHS = 30
+matchCnt = 0
 
     async function generateMnemonicAndAddress(userCustomerParameters) {
 
@@ -47,13 +13,13 @@
             appendResultList("Empty customer input")
         }
 
-        appendResultList("Search following word from address: " + userCustomerParameters.matched_words.join(","))
-        appendResultList("Total mnemonic will be genereated: " + userCustomerParameters.total_mnemonics)
+        //appendResultList("Search following word from address: " + userCustomerParameters.matched_words.join(","))
+        //appendResultList("Total mnemonic will be genereated: " + userCustomerParameters.total_mnemonics)
 
         i = 0
-        while (true) {
+        while (userCustomerParameters.matched_words.length>=matchCnt) {
 
-            updateProgress(++i, userCustomerParameters.total_mnemonics)
+            updateProgress_making(++i, userCustomerParameters.total_mnemonics)
 
             var mnemonic = Client.mnemonic();
             var privkey = Client.xPrivKey(mnemonic);
@@ -63,7 +29,7 @@
                 checkAddressByWalletPubkey(mnemonic, walletIndex, walletPubkey, userCustomerParameters)
             }
 
-            await sleep(100);
+            await sleep(50);
 
             if (matchCnt >= userCustomerParameters.total_mnemonics) {
                 break
@@ -93,7 +59,8 @@
         for(index in userCustomerParameters.matched_words) {
             var isMatch = address.startsWith(userCustomerParameters.matched_words[index])
             if (isMatch) {
-                matchCnt++
+                matchCnt+=1;
+                updateProgress_state();
                 return true
             }
         }
@@ -110,12 +77,17 @@
           var ul = document.getElementById("result_list");
           var li = document.createElement("li");
           li.appendChild(document.createTextNode(resultItem));
+          li.innerHTML=resultItem;
           ul.appendChild(li);
 
     }
 
-    function updateProgress(i, totalMnemonic) {
-        document.getElementById('progress_percent').innerHTML = "找到满足条件的地址：" + matchCnt + "个<br/>"  + "已经查找次数:" + i
+    function updateProgress_making(i, totalMnemonic) {
+        document.getElementById('progress_percent_making').innerHTML = "正在生成 :" + i;
+    }
+
+    function updateProgress_state() {
+        document.getElementById('progress_percent_state').innerHTML = "找到满足条件的地址：" + matchCnt + "个";
     }
 
 
@@ -135,32 +107,3 @@
     function parserUserInputWordList(sentence) {
         return sentence.trim().toUpperCase().split(/[ ,]+/).filter(word => word.length > 0)
     }
-
-
-</script>
-
-<form id="user_customer_parameter">
-    指定开头字母／单词: [用逗号或空格分开]
-    <br>
-    <input id="user_customer_matched_words" type="text" name="matched_words" value="TT TFANS TTT BJ" size="60">
-    <br>
-    <br>
-    期望生成地址数量:<br>
-    <input id="user_customer_total_mnemonics" type="text" name="total_mnemonics" value="1">
-    <br><br>
-</form>
-
-<button id="btn_start" type="button"
-        onclick="generateMnemonicAndAddress(readUserInputParameter())">Go
-</button>
-
-<br>
-<p id="progress_percent">进度：</p>
-<br>
-
-<ul id="result_list">
-</ul>
-
-</body>
-
-</html>

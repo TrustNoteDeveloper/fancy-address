@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>fancy address</title>
+    <meta charset="UTF-8">
+    <link href="bootstrap.css" rel="stylesheet">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="core.js"></script>
+    <script src="app.js"></script>
+    <style type="text/css">
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    body {
+        background: #fff;
+    }
+
+    input {
+        font-size: 22px;
+        color: #E05B41;
+        letter-spacing: 0;
+        text-align: left;
+        line-height: 22px;
+    }
+
+    button {
+        font-size: 22px;
+    }
+    .wapper{
+        width: 960px;
+        margin: 0 auto;
+        background: #F4F4F4;
+        padding: 20px;
+    }
+    @media screen and (max-width: 700px) {
+        .wapper{
+            width: 100%;
+            padding: 5%;
+        }
+        .header h3{
+            position: absolute;
+            color: #fff;
+            top: 40%;
+            left: 5%;
+            right: 5%;
+            height: 10%;
+            width: 90%;
+        }
+    }
+    </style>
+</head>
+<body>
+
+        <div class="wapper">
+ 
+        <form>
+                <h2>fancy address</h2>
+                <div class="form-group">
+                  <label for="user_customer_matched_words">输入地址开头字符</label>
+                  <input id="user_customer_matched_words" class="form-control" type="text" aria-describedby="Help1" placeholder="输入地址开头字符" name="matched_words" value="ok" size="60">
+                  <small id="Help1" class="form-text text-muted">1-5个字符（英文和数字）</small>
+                
+                </div>
+                <div class="form-group">
+                        <label for="user_customer_matched_words">生成地址数量</label>
+                        <input id="user_customer_total_mnemonics" class="form-control" type="text" aria-describedby="Help2" placeholder="输入生成地址数量" name="matched_words" name="total_mnemonics" value="1">
+                        <small id="Help2" class="form-text text-muted">1-5个字符（英文和数字）</small>
+                    </div>
+                <button id="btn_start" class="btn btn-primary" type="button" onclick="generateMnemonicAndAddress(readUserInputParameter())">立刻生成</button>
+              </form>
+
+
+    
+    <p>
+        可以同时生成多种地址，需要用逗号或空格分开（英文半角），输入的字符越多，生成的速度越慢。
+    </p>
+
+
+<br>
+<p id="progress_percent_state"></p>
+<p id="progress_percent_making"></p>
+<br>
+
+<ul id="result_list">
+</ul>
+</div>
+</body>
+
+</html>
