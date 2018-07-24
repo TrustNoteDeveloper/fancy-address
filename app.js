@@ -3,11 +3,17 @@ WALLET_ADDRESS_DEPTHS = 30
 matchCnt = 0
 
     async function generateMnemonicAndAddress(userCustomerParameters) {
+        matchCnt = 0;
 
-        matchCnt = 0
+        $("#progress_percent_state").text("");
+        $("#progress_percent_making").text("");
 
-        document.getElementById('btn_start').disabled = true
+        document.getElementById('btn_start').disabled = true;
+        $("#btn_start").text("正在生成中");
 
+        $("#btn_start").removeClass("btn-primary");
+        $("#btn_start").addClass("btn-secondary");
+        
 
         if (userCustomerParameters.matched_words.length == 0) {
             appendResultList("Empty customer input")
@@ -29,7 +35,7 @@ matchCnt = 0
                 checkAddressByWalletPubkey(mnemonic, walletIndex, walletPubkey, userCustomerParameters)
             }
 
-            await sleep(50);
+            await sleep(10);
 
             if (matchCnt >= userCustomerParameters.total_mnemonics) {
                 break
@@ -37,6 +43,9 @@ matchCnt = 0
 
         }
         document.getElementById('btn_start').disabled = false
+        $("#btn_start").text("立刻生成");
+        $("#btn_start").addClass("btn-primary");
+        $("#btn_start").removeClass("btn-secondary");
 
 
     }
