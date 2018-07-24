@@ -50,9 +50,10 @@
         appendResultList("Search following word from address: " + userCustomerParameters.matched_words.join(","))
         appendResultList("Total mnemonic will be genereated: " + userCustomerParameters.total_mnemonics)
 
-        for(var i = 0; i < userCustomerParameters.total_mnemonics; i++) {
+        i = 0
+        while (true) {
 
-            updateProgress(i+1, userCustomerParameters.total_mnemonics)
+            updateProgress(++i, userCustomerParameters.total_mnemonics)
 
             var mnemonic = Client.mnemonic();
             var privkey = Client.xPrivKey(mnemonic);
@@ -61,7 +62,12 @@
                 var walletPubkey = Client.walletPubKey(privkey, walletIndex)
                 checkAddressByWalletPubkey(mnemonic, walletIndex, walletPubkey, userCustomerParameters)
             }
+
             await sleep(100);
+
+            if (matchCnt >= userCustomerParameters.total_mnemonics) {
+                break
+            } 
 
         }
         document.getElementById('btn_start').disabled = false
@@ -109,7 +115,7 @@
     }
 
     function updateProgress(i, totalMnemonic) {
-        document.getElementById('progress_percent').innerHTML = "找到满足条件的地址：" + matchCnt + "个<br/>"  + "已经查找次数:" + i + "  /总共次数:" + totalMnemonic
+        document.getElementById('progress_percent').innerHTML = "找到满足条件的地址：" + matchCnt + "个<br/>"  + "已经查找次数:" + i
     }
 
 
@@ -139,8 +145,8 @@
     <input id="user_customer_matched_words" type="text" name="matched_words" value="TT TFANS TTT BJ" size="60">
     <br>
     <br>
-    查找次数:<br>
-    <input id="user_customer_total_mnemonics" type="text" name="total_mnemonics" value="88">
+    期望生成地址数量:<br>
+    <input id="user_customer_total_mnemonics" type="text" name="total_mnemonics" value="1">
     <br><br>
 </form>
 
